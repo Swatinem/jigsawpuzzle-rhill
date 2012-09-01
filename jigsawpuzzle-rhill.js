@@ -2478,7 +2478,24 @@ function Puzzle(id,puzzleOptions) {
 	// event handlers
 	//
 	gadgets.addEventListener(self,'unload',function(){me.unload();});
-	this.canvas.onclick = function(e) {
+	this.canvas.onmousedown = function (e) {
+		if (me.imoved >= 0)
+			return; // ignore if we are already moving a piece
+
+		var pos=me.normalizeEventPos(e);
+		var ipart=me.partUnderPoint(pos);
+		if (ipart>=0) {
+			// bring on top
+			me.imoved=me.sendTop(ipart);
+			var moved=me.drawingStack[me.imoved];
+			var dPos=moved.getDisplayPos();
+			me.movedAnchor.x=pos.x-dPos.x;
+			me.movedAnchor.y=pos.y-dPos.y;
+			me.draw(moved.getDisplayBbox());
+			this.style.cursor="-moz-grabbing";
+		}
+	};
+	this.canvas.onmouseup = function (e) {
 		var imoved=me.imoved;
 		me.imoved=-1;
 		if (imoved>= 0) {
@@ -2486,26 +2503,12 @@ function Puzzle(id,puzzleOptions) {
 			if (me.drawingStack[imoved].piece) {
 				if (!me.snapPiece(imoved)) {
 					me.config.showComposite=false; // for convenience
-					}
 				}
+			}
 			me.draw();
 			this.style.cursor="-moz-grab";
-			}
-		else {
-			var pos=me.normalizeEventPos(e);
-			var ipart=me.partUnderPoint(pos);
-			if (ipart>=0) {
-				// bring on top
-				me.imoved=me.sendTop(ipart);
-				var moved=me.drawingStack[me.imoved];
-				var dPos=moved.getDisplayPos();
-				me.movedAnchor.x=pos.x-dPos.x;
-				me.movedAnchor.y=pos.y-dPos.y;
-				me.draw(moved.getDisplayBbox());
-				this.style.cursor="-moz-grabbing";
-				}
-			}
-		};
+		}
+	};
 	this.canvas.onmousemove = function(e) {
 		var pos=me.normalizeEventPos(e);
 		if (me.imoved<0) {
