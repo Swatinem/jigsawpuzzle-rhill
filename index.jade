@@ -1,0 +1,68 @@
+!!! 5
+html
+	head
+		title Jigsaw Puzzle
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		link(rel="stylesheet", href="style.css")
+		script(type="text/javascript", src="lib-build.js")
+		script(type="text/javascript", src="jigsawpuzzle-rhill.js")
+		script(type="text/javascript")
+			document.addEventListener("DOMContentLoaded", function () {
+				var lib = require('jigsaw/lib');
+				for (var name in lib) {
+					window[name] = lib[name];
+				}
+				var UI = require('jigsaw/ui');
+				var header = document.querySelectorAll('header')[0];
+				var canvas = document.getElementById('canvas');
+				canvas.height = window.innerHeight - header.offsetHeight;
+				//canvas.parentElement.style.height = canvas.height + 'px'; // wtf?
+				canvas.width = window.innerWidth;
+				canvas.backgroundColor = 'white';
+				var ui = new UI;
+				ui.on('file', function (url) {
+					new Puzzle(canvas,{
+						view: 'mini',
+						numPieces: 50,
+						src: url,
+						numRotateSteps: 1
+					});
+				});
+			}, false);
+	body
+		header
+			button#create Create
+			.controls
+				button#puzzleShowEdges Show edge pieces only
+				button#puzzleShowPreview Show preview
+			.rollover
+				span Keyboard shortcuts
+				dl
+					dt left, right, A, D, Mousewheel
+					dd Rotate piece
+					dt up, down, W, S
+					dd Raise/Lower piece
+					dt E
+					dd Toggle visibility of non-edge pieces
+					dt Q
+					dd show/hide preview tile
+					dt Space
+					dd show/hide non-composite pieces (pieces made up of two or more atomic pieces)
+			a.fork(href="https://github.com/Swatinem/jigsawpuzzle-rhill") Fork me
+		canvas#canvas
+		| <audio id="puzzleSnap1" autobuffer><source src="12842__schluppipuppie__klick_01.ogg" /><source src="12842__schluppipuppie__klick_01.wav" /></audio>
+		| <audio id="puzzleSnap2" autobuffer><source src="12843__schluppipuppie__klick_02.ogg" /><source src="12843__schluppipuppie__klick_02.wav" /></audio>
+		| <audio id="puzzleClap1"><source src="35102_m1rk0_applause_5sec.ogg" /><source src="35102_m1rk0_applause_5sec.mp3" /></audio>
+		| <audio id="puzzleClap2"><source src="35104_m1rk0_applause_8sec.ogg" /><source src="35104_m1rk0_applause_8sec.mp3" /></audio>
+		| <audio id="puzzleClap3"><source src="60789_J.Zazvurek_Applause_9s.ogg" /><source src="60789_J.Zazvurek_Applause_9s.mp3" /></audio>
+		section#create
+			form
+				label Cut
+					| <select id="puzzleCut"><option value="classic" selected="selected">Classic</option><option value="straight">Straight</option><option value="tenon">Tenon</option><option value="wave">Wave</option></select>
+				label Pieces
+					| <input id="puzzlePieces" type="text" size="2" maxlength="3" value="16"/>
+				label Complexity
+					| <select id="puzzleComplexity"><option value="0">Regular</option><option value="1" selected="selected">Slightly irregular</option><option value="3">Moderatly irregular</option><option value="8">Very irregular</option></select>
+				label Rotation
+					| <select id="puzzleRotate"><option value="1" selected="selected">No rotation</option><option value="4">Rotate 90&deg;</option><option value="24">Rotate fully</option></select>
+				input(type="submit") Create

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 // if no gadgets infrastructure, create a gadgets lookalike
 if (!gadgets) {
-	if(!this.JSON){this.JSON={}}(function(){function f(n){return n<10?'0'+n:n}if(typeof Date.prototype.toJSON!=='function'){Date.prototype.toJSON=function(a){return isFinite(this.valueOf())?this.getUTCFullYear()+'-'+f(this.getUTCMonth()+1)+'-'+f(this.getUTCDate())+'T'+f(this.getUTCHours())+':'+f(this.getUTCMinutes())+':'+f(this.getUTCSeconds())+'Z':null};String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(a){return this.valueOf()}}var e=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={'\b':'\\b','\t':'\\t','\n':'\\n','\f':'\\f','\r':'\\r','"':'\\"','\\':'\\\\'},rep;function quote(b){escapable.lastIndex=0;return escapable.test(b)?'"'+b.replace(escapable,function(a){var c=meta[a];return typeof c==='string'?c:'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+b+'"'}function str(a,b){var i,k,v,length,mind=gap,partial,value=b[a];if(value&&typeof value==='object'&&typeof value.toJSON==='function'){value=value.toJSON(a)}if(typeof rep==='function'){value=rep.call(b,a,value)}switch(typeof value){case'string':return quote(value);case'number':return isFinite(value)?String(value):'null';case'boolean':case'null':return String(value);case'object':if(!value){return'null'}gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==='[object Array]'){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||'null'}v=partial.length===0?'[]':gap?'[\n'+gap+partial.join(',\n'+gap)+'\n'+mind+']':'['+partial.join(',')+']';gap=mind;return v}if(rep&&typeof rep==='object'){length=rep.length;for(i=0;i<length;i+=1){k=rep[i];if(typeof k==='string'){v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}else{for(k in value){if(Object.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}v=partial.length===0?'{}':gap?'{\n'+gap+partial.join(',\n'+gap)+'\n'+mind+'}':'{'+partial.join(',')+'}';gap=mind;return v}}if(typeof JSON.stringify!=='function'){JSON.stringify=function(a,b,c){var i;gap='';indent='';if(typeof c==='number'){for(i=0;i<c;i+=1){indent+=' '}}else if(typeof c==='string'){indent=c}rep=b;if(b&&typeof b!=='function'&&(typeof b!=='object'||typeof b.length!=='number')){throw new Error('JSON.stringify');}return str('',{'':a})}}if(typeof JSON.parse!=='function'){JSON.parse=function(c,d){var j;function walk(a,b){var k,v,value=a[b];if(value&&typeof value==='object'){for(k in value){if(Object.hasOwnProperty.call(value,k)){v=walk(value,k);if(v!==undefined){value[k]=v}else{delete value[k]}}}}return d.call(a,b,value)}c=String(c);e.lastIndex=0;if(e.test(c)){c=c.replace(e,function(a){return'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})}if(/^[\],:{}\s]*$/.test(c.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,'@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,']').replace(/(?:^|:|,)(?:\s*\[)+/g,''))){j=eval('('+c+')');return typeof d==='function'?walk({'':j},''):j}throw new SyntaxError('JSON.parse');}}}());	var gadgets={
+	var gadgets={
 		fake:true,
 		window:{
 			adjustHeight:function(){}
@@ -79,48 +79,6 @@ if (!gadgets) {
 				if (xmlhttp.readyState==4) {return;}
 				xmlhttp.send();
 				}
-			},
-		TabSet:function(id){
-			var me=this;
-			this.tabs=[];
-			this.jigsawpuzzleFirst=id;
-			this._setSelectedTab=function(id){
-				var iDiv,oDiv;
-				var oContainer=self.document.getElementById("tabContentContainer");
-				var oDivs=oContainer.getElementsByTagName("div");
-				for (iDiv=0; iDiv<oDivs.length; iDiv++) {
-					oDiv=oDivs[iDiv];
-					if (oDiv.jigsawpuzzleId!==undefined){
-						oDiv.style.display=(oDiv.jigsawpuzzleId==id)?"":"none";
-						}
-					}
-				oContainer.style.display="";
-				oContainer=self.document.getElementById("tabHeaderContainer");
-				oDivs=oContainer.getElementsByTagName("div");
-				for (iDiv=0; iDiv<oDivs.length; iDiv++) {
-					oDiv=oDivs[iDiv];
-					if (oDiv.jigsawpuzzleId!==undefined){
-						oDiv.className="tabHeader"+(oDiv.jigsawpuzzleId==id?"On":"Off");
-						}
-					}
-				oContainer.style.display="";
-				};
-			this.getTabs=function(){return [];};
-			this.getHeaderContainer=function(){return self.document.getElementById("tabHeaderContainer");};
-			this.addTab=function(id,parms){
-				var oTab=self.document.getElementById("puzzleTabHeader"+id);
-				oTab.jigsawpuzzleId=parms.contentContainer.jigsawpuzzleId=id;
-				this.tabs.push(id);
-				oTab.onclick=function(){
-					me._setSelectedTab(this.jigsawpuzzleId);
-					};
-				this._setSelectedTab(this.jigsawpuzzleFirst);
-				};
-			this.setSelectedTab=function(idx){
-				this._setSelectedTab(this.tabs[idx]);
-				//self.window.anchor="#"+s;
-				};
-			this.getSelectedTab=function(){return null;};
 			},
 		json:{
 			parse:function(s){return JSON.parse(s);},
@@ -333,405 +291,6 @@ gadgets.Base64={
 function stdout(s,clear){var consoleObj=self.document.getElementById('console');if(consoleObj){if(clear){consoleObj.innerHTML="";}consoleObj.innerHTML+=s+"<br>";}}
 function stderr(s) {if (self.debug_on){stdout(s);}}
 
-// Point object
-function Point(a,b,c) {
-	// a=x,b=y, c=id
-	if (b!==undefined) {
-		this.x=a;
-		this.y=b;
-		this.id=(c!==undefined)?c:0;
-		}
-	// a=Point or {x:?,y:?,id:?}
-	else if (a && a.x!==undefined) {
-		this.x=a.x;
-		this.y=a.y;
-		this.id=(a.id!==undefined)?a.id:0;		
-		}
-	// empty
-	else {
-		this.x=this.y=this.id=0;
-		}
-	}
-Point.prototype.toString = function() {
-	return "{x:"+this.x+",y:"+this.y+",id:"+this.id+"}";
-	};
-Point.prototype.toHashkey = function() {
-	// We could use toString(), but I am concerned with
-	// the performance of Polygon.merge(). As for now
-	// I have no idea if its really that much of an
-	// improvement, but I figure the shorter the string
-	// used as a hash key, the better. This also reduce
-	// the number of concatenations from 6 to 2. Ultimately,
-	// I could cache the hash key..
-	return this.x+"_"+this.y;
-	};
-Point.prototype.clone = function() {
-	return new Point(this);
-	};
-Point.prototype.offset = function(dx,dy) {
-	this.x+=dx; this.y+=dy;
-	};
-Point.prototype.set = function(a) {
-	this.x=a.x;
-	this.y=a.y;
-	this.id=(a.id!==undefined)?a.id:0;
-	};
-Point.prototype.compare = function(other,strict) {
-	return this.x==other.x && this.y==other.y && (!strict || this.id==other.id);
-	};
-
-// Segment object
-function Segment(a,b) {
-	this.ptA = new Point(a);
-	this.ptB = new Point(b);
-	}
-Segment.prototype.toString = function() {
-	return "["+this.ptA+","+this.ptB+"]";
-	};
-Segment.prototype.compare = function(other) {
-	return (this.ptA.compare(other.ptA) && this.ptB.compare(other.ptB)) || (this.ptA.compare(other.ptB) && this.ptB.compare(other.ptA));
-	};
-
-// Bounding box object
-function Bbox(a,b,c,d) {
-	// a=x1,b=y1,c=x2,d=y2
-	if (d!==undefined) {
-		this.tl=new Point({x:a,y:b});
-		this.br=new Point({x:c,y:d});
-		}
-	// a=Point or {x:?,y:?},b=Point or {x:?,y:?}
-	else if (b!==undefined) {
-		var mn=Math.min;
-		var mx=Math.max;
-		this.tl=new Point({x:mn(a.x,b.x),y:mn(a.y,b.y)});
-		this.br=new Point({x:mx(a.x,b.x),y:mx(a.y,b.y)});
-		}
-	// a=Bbox or {tl:{x:?,y:?},br:{x:?,y:?}}
-	else if (a) {
-		this.tl=new Point(a.tl);
-		this.br=new Point(a.br);
-		}
-	// empty
-	else {
-		this.tl=new Point();
-		this.br=new Point();
-		}
-	}
-Bbox.prototype.toString = function() {
-	return "{tl:"+this.tl+",br:"+this.br+"}";
-	};
-Bbox.prototype.clone = function() {
-	return new Bbox(this);
-	};
-Bbox.prototype.getTopleft = function() {
-	return new Point(this.tl);
-	};
-Bbox.prototype.getBottomright = function() {
-	return new Point(this.br);
-	};
-Bbox.prototype.unionPoint = function(p) {
-	var mn=Math.min;
-	var mx=Math.max;
-	this.tl.x=mn(this.tl.x,p.x);
-	this.tl.y=mn(this.tl.y,p.y);
-	this.br.x=mx(this.br.x,p.x);
-	this.br.y=mx(this.br.y,p.y);
-	};
-Bbox.prototype.unionPoints = function(a) {
-	// assume array of values
-	if (a instanceof Array) {
-		var mx=self.Math.max;
-		var mn=self.Math.min;
-		var x; var y;
-		for (var i=0; i<a.length; i+=2) {
-			x=a[i]; y=a[i+1];
-			this.tl.x=mn(this.tl.x,x);
-			this.tl.y=mn(this.tl.y,y);
-			this.br.x=mx(this.br.x,x);
-			this.br.y=mx(this.br.y,y);
-			}
-		}
-	};
-Bbox.prototype.width = function() {
-	return this.br.x-this.tl.x;
-	};
-Bbox.prototype.height = function() {
-	return this.br.y-this.tl.y;
-	};
-Bbox.prototype.offset = function(dx,dy) {
-	this.tl.offset(dx,dy);
-	this.br.offset(dx,dy);
-	};
-Bbox.prototype.set = function(a) {
-	if (a) {
-		if (a instanceof Array) {
-			// array of Points
-			if (a.length>0) {
-				var mx=self.Math.max;
-				var mn=self.Math.min;
-				var i;
-				if (a[0].x!==undefined) {
-					this.tl.x=this.br.x=a[0].x;
-					this.tl.y=this.br.y=a[0].y;
-					var p;
-					for (i=1; i<a.length; i++) {
-						p=a[i];
-						this.tl.x=mn(this.tl.x,p.x);
-						this.tl.y=mn(this.tl.y,p.y);
-						this.br.x=mx(this.br.x,p.x);
-						this.br.y=mx(this.br.y,p.y);
-						}
-					}
-				// assume array of values
-				else {
-					var x; var y;
-					for (i=0; i<a.length; i+=2) {
-						x=a[i]; y=a[i+1];
-						this.tl.x=mn(this.tl.x,x);
-						this.tl.y=mn(this.tl.y,y);
-						this.br.x=mx(this.br.x,x);
-						this.br.y=mx(this.br.y,y);
-						}
-					}
-				}
-			}
-		}
-	};
-Bbox.prototype.pointIn = function(p) {
-	return p.x>this.tl.x && p.x<this.br.x && p.y>this.tl.y && p.y<this.br.y;
-	};
-Bbox.prototype.doesIntersect = function(bb) {
-	var mn=self.Math.min;
-	var mx=self.Math.max;
-	return (mn(bb.br.x,this.br.x)-mx(bb.tl.x,this.tl.x))>0 && (mn(bb.br.y,this.br.y)-mx(bb.tl.y,this.tl.y))>0;
-	};
-Bbox.prototype.union = function(other) {
-	// this bbox is empty
-	if (this.isEmpty()) {
-		this.tl=new Point(other.tl);
-		this.br=new Point(other.br);
-		}
-	// union only if other bbox is not empty
-	else if (!other.isEmpty()) {
-		var mn=self.Math.min;
-		var mx=self.Math.max;
-		this.tl.x=mn(this.tl.x,other.tl.x);
-		this.tl.y=mn(this.tl.y,other.tl.y);
-		this.br.x=mx(this.br.x,other.br.x);
-		this.br.y=mx(this.br.y,other.br.y);
-		}
-	return this;
-	};
-Bbox.prototype.inflate = function(a) {
-	this.tl.x-=a;
-	this.tl.y-=a;
-	this.br.x+=a;
-	this.br.y+=a;
-	};
-Bbox.prototype.isEmpty = function() {
-	return this.width()<=0 || this.height()<=0;
-	};
-Bbox.prototype.toCanvasPath = function(ctx) {
-	ctx.rect(this.tl.x,this.tl.y,this.width(),this.height());
-	};
-
-// Region object (collection of [todo:non-overlapping] bounding boxes
-function Region() {
-	this.bboxes=[];
-	}
-Region.prototype.add = function(tl,br) {
-	this.bboxes.push(new Bbox(tl,br));
-	};
-Region.prototype.fill = function(ctx,fillStyle,clip) {
-	ctx.fillStyle=fillStyle;
-	for (var i=0; i<this.bboxes.length; i++) {
-		var bbox=this.bboxes[i];
-		if (clip===undefined || !clip || bbox.doesIntersect(clip)) {
-			ctx.fillRect(bbox.tl.x,bbox.tl.y,bbox.width(),bbox.height());
-			}
-		}
-	};
-
-// Bezier object
-function Bezier(a) {
-	Array.call(this);
-	if (a instanceof Array) {
-		this[0]=a[0]; // cx1
-		this[1]=a[1]; // cy1
-		this[2]=a[2]; // cx2
-		this[3]=a[3]; // cy2
-		this[4]=a[4]; // x
-		this[5]=a[5]; // y
-		}
-	}
-Bezier.prototype=[];
-
-// Profile object
-function Profile(a) {
-	this.beziers=[];
-	if (a) {
-		if (a.beziers!==undefined) {
-			var beziers=a.beziers;
-			var nBeziers=beziers.length;
-			for (var iBezier=0; iBezier<nBeziers; iBezier++) {
-				this.beziers.push(new Bezier(beziers[iBezier]));
-				}
-			}
-		}
-	}
-Profile.prototype.getBboxConst = function() {
-	if (!this.bbox) {
-		var beziers=this.beziers;
-		var nBeziers=beziers.length;
-		if (nBeziers>0){
-			this.bbox=new Bbox();
-			this.bbox.set(beziers[0]);
-			for (var iBezier=1; iBezier<nBeziers; iBezier++) {
-				this.bbox.unionPoints(beziers[iBezier]);
-				}
-			}
-		else {
-			this.bbox=new Bbox();
-			}
-		}
-	return this.bbox;
-	};
-Profile.prototype.getBbox = function() {
-	return new Bbox(this.getBboxConst());
-	};
-Profile.prototype.complement = function() {
-	var r=new Profile(this);
-	// Just a matter of (normalized profiles required):
-	// * vertical flip = sign inversion of Y
-	// * horizontal flip = 1024 minus X
-	// * for each bezier curve:
-	//   * swap control point 1 with control point 2
-	//   * the point is taken from the previous curve
-	// * reverse order of the beziers in the array
-	// This way we end up with a mirror curve which is
-	// still drawn from pt A to pt B
-	var beziers=r.beziers;
-	var nBeziers=beziers.length;
-	var bezier;
-	var nx; var ny;
-	var x=1024; var y=0;
-	for (var iBezier=0; iBezier<nBeziers; iBezier++) {
-		bezier=beziers[iBezier];
-		nx=bezier[4];
-		ny=bezier[5];
-		bezier[4]=x;
-		bezier[5]=y;
-		x=1024-bezier[0];
-		y=-bezier[1];
-		bezier[0]=1024-bezier[2];
-		bezier[1]=-bezier[3];
-		bezier[2]=x;
-		bezier[3]=y;
-		x=1024-nx;
-		y=-ny;
-		}
-	beziers.reverse();
-	return r;
-	};
-Profile.prototype.transform = function(ptA,ptB) {
-	var r=new Profile();
-	var round=self.Math.round;
-	// first we need to find the scaling factor, dependent on the length
-	// of the line defined by ptA-ptB (normalized profiles are drawn in a
-	// 1024x1024px world, origin at (0,0)
-	var scale=self.Math.sqrt(self.Math.pow(ptB.x-ptA.x,2)+self.Math.pow(ptB.y-ptA.y,2))/1024;
-	// Then we need to find the angle of the line defined by ptA-ptB
-	var angle=self.Math.atan2(ptB.y-ptA.y,ptB.x-ptA.x);
-	// now transform each point
-	var cosang=self.Math.cos(angle);
-	var sinang=self.Math.sin(angle);
-	var beziers=this.beziers;
-	var nBeziers=beziers.length;
-	var bezier;
-	var cx1; var cy1; var cx2; var cy2; var x; var y;
-	for (var iBezier=0; iBezier<nBeziers; iBezier++) {
-		bezier=beziers[iBezier];
-		x=bezier[0]*scale;
-		y=bezier[1]*scale;
-		cx1=round(x*cosang-y*sinang);
-		cy1=round(x*sinang+y*cosang);
-		x=bezier[2]*scale;
-		y=bezier[3]*scale;
-		cx2=round(x*cosang-y*sinang);
-		cy2=round(x*sinang+y*cosang);
-		x=bezier[4]*scale;
-		y=bezier[5]*scale;
-		r.beziers.push([cx1,cy1,cx2,cy2,round(x*cosang-y*sinang),round(x*sinang+y*cosang)]);
-		}
-	return r;
-	};
-Profile.prototype.toCanvas = function(ctx,ptA,ptB) {
-	// special case: no profile
-	if (!this.beziers.length) {
-		ctx.lineTo(ptB.x,ptB.y);
-		}
-	// else apply profile
-	else {
-		var x0=ptA.x;
-		var y0=ptA.y;
-		var beziers=this.beziers;
-		var nBeziers=beziers.length;
-		var bezier;
-		for (var iBezier=0; iBezier<nBeziers; iBezier++) {
-			bezier=this.beziers[iBezier];
-			ctx.bezierCurveTo(x0+bezier[0],y0+bezier[1],x0+bezier[2],y0+bezier[3],x0+bezier[4],y0+bezier[5]);
-			}
-		}
-	};
-// Built-in profiles
-// Profiles must be built horizontally, along the top edge of a 1024x1024 tile, and must
-// extend to the whole edge, expressly starting at the top-left corner (the origin=0,0)
-// and ending at the top-right corner (1024,0). In between, all is allowed. I use GIMP,
-// create a 1024x1024 canvas, then use the path tool to create a path in between (0,0) and
-// (1024,0), and then export the path as an SVG file, and manually convert to JSON as seen
-// below.
-// Format: each member of the array is an
-// array of integer value ordered as follow:
-// [cx1,cy1,cx2,cy2,x,y]
-Profile.prototype.stock={
-	"straight":{
-		beziers:[
-			[0,0,1024,0,1024,0]
-			]
-		},
-	"classic":{
-		beziers:[
-			[0,0,448,-224,448,-96],
-			[448,-32,384,-32,384,64],
-			[384,160,448,192,512,192],
-			[576,192,640,160,640,64],
-			[640,-32,576,-32,576,-96],
-			[576,-224,1024,0,1024,0]
-			]
-		},
-	"wave":{
-		beziers:[
-			[128,128,192,-96,320,0],
-			[352,32,224,96,256,128],
-			[448,224,576,-224,768,-128],
-			[800,-96,672,-32,704,0],
-			[832,96,896,-128,1024,0]
-			]
-		},
-	"tenon":{
-		beziers:[
-			[0,0,224,0,224,0],
-			[224,0,224,192,224,192],
-			[224,192,416,192,416,192],
-			[416,192,416,0,416,0],
-			[416,0,608,0,608,0],
-			[608,0,608,192,608,192],
-			[608,192,800,192,800,192],
-			[800,192,800,0,800,0],
-			[800,0,1024,0,1024,0]
-			]
-		}
-	};
 
 // Profile randomizer object
 function ProfileRandomizer(profileNormalized,allowComplement,wobbleFactor) {
@@ -1859,7 +1418,7 @@ PuzzleBed.prototype.drawPiece = function(dTile) {
  * Else
  *   Use Default
  */
-function Puzzle(id,puzzleOptions) {
+function Puzzle(canvas, puzzleOptions) {
 	// this is me initializing
 	var me=this;
 	// Methods
@@ -1892,7 +1451,6 @@ function Puzzle(id,puzzleOptions) {
 			puzzleOptions=this.restoreKey(this.config.cookieName);
 			}
 		this.config.cut=(puzzleOptions.cut!==undefined&&Profile.prototype.stock[puzzleOptions.cut]!==undefined)?puzzleOptions.cut:defaultOptions.cut;
-		this.config.backgroundColor=puzzleOptions.backgroundColor?puzzleOptions.backgroundColor:this.canvasParent.style.backgroundColor;
 		this.config.showEdges=false;
 		this.config.showComposite=false;
 		this.config.showPreview=(puzzleOptions.showPreview!==undefined)?puzzleOptions.showPreview:false;
@@ -1909,10 +1467,6 @@ function Puzzle(id,puzzleOptions) {
 		this.minImageSize=this.minPieceSize*2;
 		// resize canvas according to calculated width/height
 		if (!this.canvas) {throw "Puzzle.create(): No canvas";}
-		this.canvas.width=this.confine(this.config.bedWidth?this.config.bedWidth:this.canvasParent.offsetWidth,100,2500,768);
-		this.canvas.height=this.confine(this.config.bedHeight?this.config.bedHeight:this.canvasParent.offsetHeight,100,2000,576);
-		this.canvasParent.style.width=this.canvas.width+'px';
-		this.canvasParent.style.height=this.canvas.height+'px';
 		// final step: load image to be used
 		this.imageSource=new Image();
 		this.imageSource.onload=function(){
@@ -1961,7 +1515,7 @@ function Puzzle(id,puzzleOptions) {
 		// comment out to verify minimal redrawing
 		//ctx.clearRect(0,0,me.canvas.width,me.canvas.height);
 		// draw only what intersect with clip region
-		ctx.fillStyle=me.config.backgroundColor;
+		ctx.fillStyle = me.canvas.backgroundColor;
 		if (clip) {
 			ctx.beginPath();
 			clip.toCanvasPath(ctx);
@@ -2325,11 +1879,11 @@ function Puzzle(id,puzzleOptions) {
 		this.puzzleShowEdges.value=opts.showEdges?"Show all pieces":"Show edge pieces only";
 		this.puzzleShowPreview.value=opts.showPreview?"Hide preview":"Show preview";
 		this.puzzleCut.selectedIndex=findOptionIndex(this.puzzleCut,opts.cut);
-		this.puzzleScreenSize.selectedIndex=findOptionIndex(this.puzzleScreenSize,opts.screenSize);
+		//this.puzzleScreenSize.selectedIndex=findOptionIndex(this.puzzleScreenSize,opts.screenSize);
 		this.puzzleComplexity.selectedIndex=findOptionIndex(this.puzzleComplexity,opts.complexity);
 		this.puzzleRotate.selectedIndex=findOptionIndex(this.puzzleRotate,opts.numRotateSteps);
 		this.puzzlePieces.value=opts.numPieces;
-		this.puzzleURL.value=opts.src;
+		//this.puzzleURL.value=opts.src;
 		};
 	// mouse wheel handling: http://adomas.org/javascript-mouse-wheel/
 	self.onmousewheel = function(e) {
@@ -2377,21 +1931,10 @@ function Puzzle(id,puzzleOptions) {
 	// Ctor code
 	//
 	// integrate canvas tag into html page
-	this.canvasParent=self.document.getElementById(id);
-	if (!this.canvasParent) {return;}
-	this.canvas=self.document.getElementById("puzzleCanvas");
-	if (!this.canvas) {
-		this.canvas=self.document.createElement("canvas");
-		if (!this.canvas) {return;}
-		}
-	if (!this.canvas.getContext) {return;}
+	this.canvas = canvas;
+	if (!this.canvas || !this.canvas.getContext) {return;}
 	this.canvas.puzzle=me;
-	// if we get here, javascript and canvas tag are supported, so turn off alert
-	this.canvasParent.style.backgroundColor='#888';
-	// Properties
-	// insert a brand new canvas element into the page
-	this.canvasParent.innerHTML='';
-	this.canvasParent.appendChild(this.canvas);
+
 	// default drawing stack
 	this.imoved=-1; // the (drawing stack) index of the part being moved
 	this.movedAnchor=new Point(); // the distance of the mouse position relative to the top-left corner of the piece being moved
@@ -2414,7 +1957,7 @@ function Puzzle(id,puzzleOptions) {
 		me.syncUI();
 		me.draw();
 		};
-	this.puzzleCreate['createPuzzle']=function(){
+	/*this.puzzleCreate['createPuzzle']=function(){
 		var prefs={
 			cut:me.puzzleCut.options[me.puzzleCut.selectedIndex].value,
 			screenSize:me.puzzleScreenSize.options[me.puzzleScreenSize.selectedIndex].value,
@@ -2470,7 +2013,7 @@ function Puzzle(id,puzzleOptions) {
 	var imgs=this.puzzleTabPresets.getElementsByTagName('img');
 	for (var iImg=0; iImg<imgs.length; iImg++) {
 		imgs[iImg].onclick=me.presetClickHandler;
-		}
+		}*/
 	// final steps: create the puzzle
 	this.create(puzzleOptions);
 	this.syncUI();

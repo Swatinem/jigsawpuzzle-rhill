@@ -1,0 +1,19 @@
+{
+  "name": "jigsaw",
+  "repo": "Swatinem/jigsaw",
+  "description": "",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "component/emitter": "*"
+  },
+  "scripts": [
+    "ui.js",
+    "lib.js",
+    "lib/point.js",
+    "lib/segment.js",
+    "lib/bbox.js",
+    "lib/bezier.js",
+    "lib/profile.js"
+  ]
+}
