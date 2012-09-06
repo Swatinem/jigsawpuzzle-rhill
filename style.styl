@@ -30,3 +30,83 @@ header
 	display none
 canvas
 	display block
+
+overlay_padding = 20px
+
+#overlay
+	position fixed
+	z-index 3
+	width 100%
+	height 100%
+	top 0
+	left 0
+	background rgba(100, 100, 100, 0.4);
+	.container
+		margin 5% auto
+		width 800px
+		background rgba(white, 0.95);
+		border-radius 30px
+		padding overlay_padding
+		box-shadow 0px 10px 50px 10px rgba(black, 0.65);
+		min-height 100px
+		overflow hidden
+	&:not(.won)
+		#won
+			display none
+		.instructions
+			padding-top overlay_padding - 10px
+			margin-top -(overlay_padding)
+
+#won
+	bg = hsl(120, 60%, 60%)
+	light = hsl(120, 70%, 90%)
+	dark = hsl(120, 60%, 40%)
+	font-size 24px
+	font-weight bold
+	font-family free-serif
+	color light
+	text-shadow 0px -1px 0px dark
+	background bg
+	margin -(overlay_padding) auto overlay_padding
+	padding 5px
+	width 400px
+	text-align center
+	border-bottom-right-radius 10px
+	border-bottom-left-radius 10px
+	box-shadow 0px 0px 10px 2px light, 0px 5px 5px -5px dark
+
+.instructions
+	margin 10px (-(overlay_padding))
+	padding 5px overlay_padding
+	background #fafafa
+	border-top 1px solid #eee
+	border-bottom 1px solid #eee
+	.upload
+		cursor pointer
+	#upload
+		display none
+
+#image
+	float right
+	width 500px
+	margin-bottom 10px
+	img
+		max-width 500px
+		max-height 300px
+
+form
+	display block
+	margin-bottom -(overlay_padding)
+	label
+		display block
+		height 25px
+		line-height 25px
+		font-weight bold
+		margin-right 510px
+		input, select
+			float right
+	input[type="submit"]
+		clear both
+		display block
+		margin 5px auto
+		width 150px

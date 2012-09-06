@@ -15,15 +15,16 @@ html
 				var UI = require('jigsaw/ui');
 				var header = document.querySelectorAll('header')[0];
 				var canvas = document.getElementById('canvas');
+				var overlay = document.getElementById('overlay');
 				canvas.height = window.innerHeight - header.offsetHeight;
-				//canvas.parentElement.style.height = canvas.height + 'px'; // wtf?
 				canvas.width = window.innerWidth;
 				canvas.backgroundColor = 'white';
 				var ui = new UI;
 				ui.on('file', function (url) {
+					overlay.style.display = 'none';
 					new Puzzle(canvas,{
 						view: 'mini',
-						numPieces: 50,
+						numPieces: 100,
 						src: url,
 						numRotateSteps: 1
 					});
@@ -55,14 +56,27 @@ html
 		| <audio id="puzzleClap1"><source src="35102_m1rk0_applause_5sec.ogg" /><source src="35102_m1rk0_applause_5sec.mp3" /></audio>
 		| <audio id="puzzleClap2"><source src="35104_m1rk0_applause_8sec.ogg" /><source src="35104_m1rk0_applause_8sec.mp3" /></audio>
 		| <audio id="puzzleClap3"><source src="60789_J.Zazvurek_Applause_9s.ogg" /><source src="60789_J.Zazvurek_Applause_9s.mp3" /></audio>
-		section#create
-			form
-				label Cut
-					| <select id="puzzleCut"><option value="classic" selected="selected">Classic</option><option value="straight">Straight</option><option value="tenon">Tenon</option><option value="wave">Wave</option></select>
-				label Pieces
-					| <input id="puzzlePieces" type="text" size="2" maxlength="3" value="16"/>
-				label Complexity
-					| <select id="puzzleComplexity"><option value="0">Regular</option><option value="1" selected="selected">Slightly irregular</option><option value="3">Moderatly irregular</option><option value="8">Very irregular</option></select>
-				label Rotation
-					| <select id="puzzleRotate"><option value="1" selected="selected">No rotation</option><option value="4">Rotate 90&deg;</option><option value="24">Rotate fully</option></select>
-				input(type="submit") Create
+		#overlay
+			.container
+				#won Congratulations, you have won! <br/> Want to try again?
+				.instructions
+					| You can 
+					em Drag&amp;Drop
+					|  or 
+					em.upload Upload
+					|  an Image from your computer, or
+					input(type="text", placeholder="paste an URL to an Image")
+					|  to start a new game…
+					input#upload(type="file", accept="image/*")
+				#image
+					img
+				form
+					label Cut
+						| <select id="puzzleCut"><option value="classic" selected="selected">Classic</option><option value="straight">Straight</option><option value="tenon">Tenon</option><option value="wave">Wave</option></select>
+					label Pieces
+						| <input id="puzzlePieces" type="text" size="2" maxlength="3" value="200"/>
+					label Complexity
+						| <select id="puzzleComplexity"><option value="0">Regular</option><option value="1" selected="selected">Slightly irregular</option><option value="3">Moderatly irregular</option><option value="8">Very irregular</option></select>
+					label Rotation
+						| <select id="puzzleRotate"><option value="1" selected="selected">No rotation</option><option value="4">Rotate 90&deg;</option><option value="24">Rotate fully</option></select>
+					input(type="submit", value="Start Game")
