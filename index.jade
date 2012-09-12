@@ -7,24 +7,7 @@ html
 		script(type="text/javascript", src="index.js")
 		script(type="text/javascript")
 			document.addEventListener("DOMContentLoaded", function () {
-				var Puzzle = require('jigsaw/puzzle');
-				var UI = require('jigsaw/ui');
-				var header = document.querySelectorAll('header')[0];
-				var canvas = document.getElementById('canvas');
-				var overlay = document.getElementById('overlay');
-				canvas.height = window.innerHeight - header.offsetHeight;
-				canvas.width = window.innerWidth;
-				canvas.backgroundColor = 'white';
-				var ui = new UI;
-				ui.on('file', function (url) {
-					overlay.style.display = 'none';
-					new Puzzle(canvas,{
-						view: 'mini',
-						numPieces: 100,
-						src: url,
-						numRotateSteps: 1
-					});
-				});
+				require('jigsaw/ui');
 			}, false);
 	body
 		header
@@ -66,7 +49,7 @@ html
 					input#upload(type="file", accept="image/*")
 				#image
 					img
-				form
+				form#form
 					label Cut
 						| <select id="puzzleCut"><option value="classic" selected="selected">Classic</option><option value="straight">Straight</option><option value="tenon">Tenon</option><option value="wave">Wave</option></select>
 					label Pieces

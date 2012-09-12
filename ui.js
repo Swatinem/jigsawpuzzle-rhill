@@ -1,49 +1,84 @@
-var emitter = require('emitter');
+var Puzzle = require('./puzzle');
+var file = require('file');
+
 
 function stop(ev) {
 	ev.stopPropagation();
 	ev.preventDefault();
 }
 
-function UI() {
-	emitter.call(this);
+/*** Resize canvas ***/
+var header = document.querySelector('header');
+var canvas = document.getElementById('canvas');
+var overlay = document.getElementById('overlay');
+canvas.height = window.innerHeight - header.offsetHeight;
+canvas.width = window.innerWidth;
+canvas.backgroundColor = 'white';
 
-	var body = document.getElementsByTagName('body')[0];
-	body.addEventListener("dragover", function(ev) {
+/*** URL for the Canvas ***/
+var url;
+
+/*** Drag&Drop ***/
+var body = document.querySelector('body');
+body.addEventListener("dragover", function(ev) {
+	stop(ev);
+});
+body.addEventListener("dragenter", function(ev) {
+	var dt = ev.dataTransfer;
+	var hasFiles = false;
+	for (var i in dt.types) {
+		hasFiles = hasFiles || dt.types[i] == "Files";
+	}
+	if (hasFiles)
 		stop(ev);
+}, false);
+body.addEventListener("drop", function(ev) {
+	stop(ev);
+	// TODO: use file.is()
+	file(ev.dataTransfer.files[0]).toDataURL(function (err, str) {
+		gotUrl(str);
 	});
-	body.addEventListener("dragenter", function(ev) {
-		var dt = ev.dataTransfer;
-		var hasFiles = false;
-		for (var i in dt.types) {
-			hasFiles = hasFiles || dt.types[i] == "Files";
-		}
-		if (hasFiles)
-			stop(ev);
-	}, false);
-	var self = this;
-	body.addEventListener("drop", function(ev) {
-		function tryFile() {
-			if (!files[i])
-				return;
-			var file = files[i++];
-			var reader = new FileReader();
-			reader.onloadend = function(ev) {
-				var content = ev.target.result;
-				self.emit('file', content);
-			}
-			try {
-				if (!~file.type.indexOf('image'))
-					return tryFile();
-				reader.readAsDataURL(file);
-			} catch(e) {}
-		}
-		var dt = ev.dataTransfer;
-		var files = dt.files;
-		var i = 0;
-		stop(ev);
-		tryFile();
-	}, false);
+}, false);
+
+/*** Upload ***/
+var upload = document.querySelector('#upload');
+document.querySelector('.upload').addEventListener('click', function () { upload.click(); }, false);
+upload.addEventListener('change', function () {
+	// TODO: use file.is()
+	file(upload.files[0]).toDataURL(function (err, str) {
+		gotUrl(str);
+	});
+}, false);
+
+/*** Paste URL ***/
+
+
+/*** Preview and enable form ***/
+var formElements = document.querySelectorAll('#form input, #form select');
+var preview = document.querySelector('#image img');
+function gotUrl(aUrl) {
+	preview.src = url = aUrl;
+	for (var i = 0; i < formElements.length; i++) {
+		formElements[i].disabled = false;
+	}
 }
-UI.prototype = Object.create(emitter.prototype);
-module.exports = UI;
+function resetForm() {
+	preview.src = url = '';
+	for (var i = 0; i < formElements.length; i++) {
+		formElements[i].disabled = true;
+	}
+}
+resetForm();
+
+
+/*** Form handling ***/
+document.querySelector('#form').addEventListener('submit', function (ev) {
+	stop(ev);
+	overlay.style.display = 'none';
+	new Puzzle(canvas,{
+		view: 'mini',
+		numPieces: parseInt(document.querySelector('#puzzlePieces').value) || 100,
+		src: url,
+		numRotateSteps: 1
+	});
+}, false);
