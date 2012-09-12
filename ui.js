@@ -51,6 +51,13 @@ upload.addEventListener('change', function () {
 }, false);
 
 /*** Paste URL ***/
+var paste = document.querySelector('#paste');
+paste.addEventListener('change', function () {
+	gotUrl(paste.value);
+}, false);
+paste.addEventListener('keyup', function () {
+	gotUrl(paste.value);
+}, false);
 
 
 /*** Preview and enable form ***/
@@ -63,7 +70,7 @@ function gotUrl(aUrl) {
 	}
 }
 function resetForm() {
-	preview.src = url = '';
+	preview.src = paste.value = url = '';
 	for (var i = 0; i < formElements.length; i++) {
 		formElements[i].disabled = true;
 	}
@@ -80,5 +87,9 @@ document.querySelector('#form').addEventListener('submit', function (ev) {
 		numPieces: parseInt(document.querySelector('#puzzlePieces').value) || 100,
 		src: url,
 		numRotateSteps: 1
+	}).on('win', function () {
+		overlay.className = 'won';
+		overlay.style.display = 'block';
+		resetForm();
 	});
 }, false);
