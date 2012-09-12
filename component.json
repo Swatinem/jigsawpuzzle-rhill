@@ -9,7 +9,7 @@
   },
   "scripts": [
     "ui.js",
-    "lib.js",
+    "puzzle.js",
     "lib/point.js",
     "lib/segment.js",
     "lib/bbox.js",
@@ -26,6 +26,7 @@
     "lib/puzzlepart.js",
     "lib/puzzlepiece.js",
     "lib/puzzlepreview.js",
-    "lib/puzzlebed.js"
+    "lib/puzzlebed.js",
+    "lib/puzzle.js"
   ]
 }

@@ -4,14 +4,10 @@ html
 		title Jigsaw Puzzle
 		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
 		link(rel="stylesheet", href="style.css")
-		script(type="text/javascript", src="lib-build.js")
-		script(type="text/javascript", src="jigsawpuzzle-rhill.js")
+		script(type="text/javascript", src="index.js")
 		script(type="text/javascript")
 			document.addEventListener("DOMContentLoaded", function () {
-				var lib = require('jigsaw/lib');
-				for (var name in lib) {
-					window[name] = lib[name];
-				}
+				var Puzzle = require('jigsaw/puzzle');
 				var UI = require('jigsaw/ui');
 				var header = document.querySelectorAll('header')[0];
 				var canvas = document.getElementById('canvas');

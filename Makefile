@@ -1,18 +1,18 @@
 all: index.html build
 
-index.html: style.css lib-build.js
+index.html: style.css index.js
 %.html: %.jade
 	jade -P < $< > $@
 
 %.css: %.styl
 	stylus < $< > $@
 
-lib-build.js: build/build.js
-	cp build/build.js lib-build.js
+index.js: build/build.js
+	cp build/build.js index.js
 
 LIB_FILES := $(wildcard lib/*.js)
 
-build/build.js: components $(LIB_FILES) lib.js ui.js
+build/build.js: components $(LIB_FILES) puzzle.js ui.js
 	component build
 
 components: component.json

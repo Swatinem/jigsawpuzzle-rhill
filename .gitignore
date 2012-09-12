@@ -1,5 +1,5 @@
 components
 build
-lib-build.js
+index.js
 index.html
 style.css
