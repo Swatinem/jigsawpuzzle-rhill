@@ -38,9 +38,15 @@ overlay_padding = 20px
 	z-index 3
 	width 100%
 	height 100%
-	top 0
 	left 0
 	background rgba(100, 100, 100, 0.4);
+	top 100%
+	opacity 0
+	transition opacity 0.5s ease 0s, top 0s 0.5s
+	&.show
+		top 0
+		opacity 1
+		transition opacity 0.5s ease 0s
 	.container
 		margin 5% auto
 		width 800px

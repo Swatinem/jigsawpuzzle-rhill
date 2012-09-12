@@ -81,15 +81,14 @@ resetForm();
 /*** Form handling ***/
 document.querySelector('#form').addEventListener('submit', function (ev) {
 	stop(ev);
-	overlay.style.display = 'none';
+	overlay.className = '';
 	new Puzzle(canvas,{
 		view: 'mini',
 		numPieces: parseInt(document.querySelector('#puzzlePieces').value) || 100,
 		src: url,
 		numRotateSteps: 1
 	}).on('win', function () {
-		overlay.className = 'won';
-		overlay.style.display = 'block';
+		overlay.className = 'show won';
 		resetForm();
 	});
 }, false);
